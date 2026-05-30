@@ -1,10 +1,12 @@
-from flask import Flask,request,render_template
+"""Module for running the Emotion Detector Flask server."""
+from flask import Flask, request, render_template
 from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask("Emotion Detector")
 
 @app.route("/emotionDetector")
 def detect_emotion():
+    """Analyze the emotion of the provided text and return the result."""
     text = request.args.get("textToAnalyze")
     emot = emotion_detector(text)
     anger = emot["anger"]
@@ -15,13 +17,14 @@ def detect_emotion():
     dominant = emot["dominant_emotion"]
     if dominant is None:
         return "Invalid text! Please Try again!."
-    return f"""For the given statement, the system response is 'anger': {anger}, 
+    return f"""For the given statement, the system response is 'anger': {anger},
     'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and 'sadness': {sadness}.
-     The dominant emotion is <b>{dominant}</b>."""
+    The dominant emotion is <b>{dominant}</b>."""
 
 @app.route("/")
 def index():
+    """Render the index page."""
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000)
+    app.run(host="0.0.0.0", port=5000)
